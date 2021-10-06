@@ -95,3 +95,6 @@ GitHub.sublime-settings
 myenv/
 
 .vscode/settings.json
+
+#tailwind css
+jstoolchain/
