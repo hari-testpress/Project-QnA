@@ -8,6 +8,7 @@ from django.contrib.contenttypes.fields import (
 
 from model_utils.models import TimeStampedModel
 from taggit.managers import TaggableManager
+from vote.models import VoteModel
 
 
 class Comment(TimeStampedModel):
