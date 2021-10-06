@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "questions",
     "tailwind",
     "theme",
+    "accounts",
 ]
 
 MIDDLEWARE = [
