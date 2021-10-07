@@ -7,6 +7,7 @@ from django.contrib.contenttypes.fields import (
 )
 
 from model_utils.models import TimeStampedModel
+from taggit.managers import TaggableManager
 
 
 class Comment(TimeStampedModel):
@@ -21,6 +22,7 @@ class Question(TimeStampedModel):
     title = models.CharField(max_length=90)
     description = models.TextField()
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    tags = TaggableManager()
     comments = GenericRelation(Comment)
 
 
