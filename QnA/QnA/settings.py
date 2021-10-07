@@ -37,8 +37,11 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+<<<<<<< HEAD
     "taggit",
     "vote",
+=======
+>>>>>>> a5f660d... Fix the bug
     "questions",
 ]
 
