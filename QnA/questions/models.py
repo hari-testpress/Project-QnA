@@ -9,7 +9,7 @@ from django.contrib.contenttypes.fields import (
 from model_utils.models import TimeStampedModel
 
 
-class Comment(TimeStampedModel, models.Model):
+class Comment(TimeStampedModel):
     text = models.TextField()
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
