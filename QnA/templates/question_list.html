@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Question list {% endblock %}
+{% block body %}
+<main class="lg:col-span-9 xl:col-span-6">
+    <div class="pt-4 bg-gray-100  w-screen h-max">
+      <h1 class="sr-only">Recent questions</h1>
+      <ul role="list" class="space-y-4 pb-10 bg-gray-100 w-full h-5/6">
+        {% for question in object_list %}
+          <li class="bg-white w-9/12 mx-auto px-10 py-6 shadow sm:p-6 sm:rounded-lg flex justify-evenly">
+            <div class="flex flex-col items-center w-10">
+              <a href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 stroke-current text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 11l3-3m0 0l3 3m-3-3v8m0-13a9 9 0 110 18 9 9 0 010-18z" />
+                </svg>
+              </a>
+              <p>{{question.vote_score}}</p>
+              <a href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 stroke-current text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13l-3 3m0 0l-3-3m3 3V8m0 13a9 9 0 110-18 9 9 0 010 18z" />
+                </svg>
+              </a>    
+          </div>
+      <article aria-labelledby="question-title-81614" class="w-11/12">
+          <div>
+            <div class="flex space-x-3">
+              <div class="min-w-0 flex-1">
+                <p class="text-xl font-semibold tracking-wide text-gray-800">
+                  <a href="#" class="hover:underline">{{question.created_by.username}}</a>
+                </p>
+                <p class="text-sm text-gray-500">
+                  <a href="#" class="hover:underline">
+                    <time datetime="2020-12-09T11:43:00">{{question.created_at}}</time>
+                  </a>
+                </p>
+              </div>
+              <div class="flex-shrink-0 self-center flex">
+                {% if question.created_by == user %}
+                <div class="relative inline-block text-left">
+                  <a href="#" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    Edit
+                  </a>
+                  <a href="#" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                    Delete
+                  </a>
+                </div>
+                {% endif %}
+              </div>
+            </div>
+            <h2 id="question-title-81614" class="mt-4 text-base font-semibold text-blue-600">
+                {{question.title}}
+            </h2>
+          </div>
+          <div class="mt-2 text-sm text-gray-700 space-y-4">
+            <p>{{question.description|truncatewords:50}}</p>
+          </div>
+          <div class="h-10">
+            {% for tag in question.tags.all %}
+            <a href=""><span class="inline-flex items-center hover:bg-blue-500 font-bold tracking-wide mt-4 px-3 py-1.5 rounded text-xs font-medium bg-blue-400 text-white">
+              {{tag}}
+            </span></a>
+            {%endfor%}
+          </div>
+          <div class="mt-6 flex justify-between space-x-8">
+            <div class="flex space-x-6">
+              <span class="inline-flex items-center text-sm">
+                <button type="button" class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
+                  <!-- Heroicon name: solid/chat-alt -->
+                  <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z" clip-rule="evenodd" />
+                  </svg>
+                  <span class="font-medium text-gray-900">{{question.comments.count}}</span>
+                  <span class="">comment{{question.comments.count|pluralize}}</span>
+                </button>
+              </span>
+              <span class="inline-flex items-center text-sm">
+                <button type="button" class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
+                  <!-- Heroicon name: solid/eye -->
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+                  </svg>
+                  <span class="font-medium text-gray-900">{{question.answers.count}}</span>
+                  <span class="">answer{{question.answers.count|pluralize}}</span>
+                </button>
+              </span>
+            </div>
+          </div>
+        </article>
+      </li>
+    {% endfor %}
+    </ul>
+  </div>
+  {% if is_paginated %}
+  <nav class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6" aria-label="Pagination">
+    <div class="-mt-px w-0 flex-1 flex">
+      {% if page_obj.has_previous %}
+      <a href="?page={{page_obj.previous_page_number}}" class="border-t-2 border-transparent pt-4 pr-1 inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300">
+        <svg class="mr-3 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M7.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l2.293 2.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+        </svg>
+        Previous
+      </a>
+      {%endif%}
+    </div>
+    
+    <div class="md:-mt-px md:flex">
+      {% for page_no in paginator.page_range %}
+        <a href="?page={{page_no}}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium">
+          {{page_no}}
+        </a>
+      {%endfor%}
+    </div>
+    
+    <div class="-mt-px w-0 flex-1 flex justify-end">
+      {% if page_obj.has_next %}
+        <a href="?page={{page_obj.next_page_number}}" class="border-t-2 border-transparent pt-4 pl-1 inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300">
+          Next
+          <svg class="ml-3 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+          </svg>
+        </a>
+    {% endif %}
+  </div> 
+  </nav>
+  {% endif %}
+</main>
+{% endblock %}
