@@ -2,8 +2,8 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView
-
+from django.views.generic import ListView, DetailView, CreateView
+from django.urls import reverse_lazy
 
 from .filters import QuestionFilter
 
@@ -30,3 +30,19 @@ class QuestionDetailView(DetailView):
     model = Question
     template_name = "question_detail_view.html"
     context_object_name = "question"
+
+    def get_queryset(self):
+        return super().get_queryset()
+
+
+class QuestionCreateView(CreateView):
+    model = Question
+    fields = ["title", "description", "tags"]
+    template_name = "question_create.html"
+    success_url = reverse_lazy("home")
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.created_by = self.request.user
+        self.object.save()
+        return super().form_valid(form)
