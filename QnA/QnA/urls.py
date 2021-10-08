@@ -21,5 +21,6 @@ from questions import views
 urlpatterns = [
     url(r"^admin/", admin.site.urls),
     path("accounts/", include("accounts.urls", namespace="accounts")),
+    path("questions/", include("questions.urls", namespace="questions")),
     path("", views.QuestionListView.as_view(), name="home"),
 ]
