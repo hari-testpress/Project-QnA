@@ -16,3 +16,12 @@ class QuestionListViewTests(TestCase):
     def test_url_resolves_question_list_function(self):
         view = resolve("/")
         self.assertEquals(view.func.view_class, QuestionListView)
+
+    def test_view_is_paginated(self):
+        response = self.client.get(self.url)
+        self.assertTrue(response.context["is_paginated"])
+
+    def test_paginator_return_given_number_of_questions(self):
+        response = self.client.get(self.url)
+        object_list = response.context["object_list"]
+        self.assertEquals(object_list.count(), 10)
