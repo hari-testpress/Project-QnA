@@ -5,6 +5,7 @@ from django.shortcuts import render
 from django.views.generic import ListView, DetailView, CreateView
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic.edit import UpdateView
 
 from .filters import QuestionFilter
 
@@ -43,3 +44,19 @@ class QuestionCreateView(LoginRequiredMixin, CreateView):
         self.object = form.save(commit=False)
         self.object.created_by = self.request.user
         return super().form_valid(form)
+
+
+class QuestionUpdateView(UpdateView):
+    model = Question
+    template_name = "question_update.html"
+    fields = ["title", "description", "tags"]
+    success_url = reverse_lazy("home")
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.save()
+        return super().form_valid(form)
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(created_by=self.request.user)
