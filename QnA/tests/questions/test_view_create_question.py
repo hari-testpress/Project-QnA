@@ -40,3 +40,17 @@ class QuestionCreateTests(TestCase):
             {"title": "title", "description": "description", "tags": "hell0"},
         )
         self.assertRedirects(response, self.home_url)
+
+    def test_authorized_user_only_can_create_a_question(self):
+        response = self.client.post(
+            self.url,
+            {"title": "title", "description": "description", "tags": "hell0"},
+        )
+        self.assertEquals(response.status_code, 302)
+
+    def test_unauthorized_user_redirected_to_the_login_page(self):
+        self.client.logout()
+        response = self.client.get(self.url)
+        self.assertRedirects(
+            response, "/accounts/login/?next=%2Fquestions%2Fcreate-question%2F"
+        )

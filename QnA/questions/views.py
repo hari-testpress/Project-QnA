@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView, CreateView
 from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .filters import QuestionFilter
 
@@ -35,7 +36,7 @@ class QuestionDetailView(DetailView):
         return super().get_queryset()
 
 
-class QuestionCreateView(CreateView):
+class QuestionCreateView(LoginRequiredMixin, CreateView):
     model = Question
     fields = ["title", "description", "tags"]
     template_name = "question_create.html"
