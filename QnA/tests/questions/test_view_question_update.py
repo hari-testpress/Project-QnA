@@ -35,3 +35,10 @@ class QuestionUpdateViewTests(TestCase):
     def test_response_contains_form(self):
         response = self.client.get(self.url)
         self.assertTrue(response.context["form"])
+
+    def test_unauthorized_user_redirected_to_the_login_page(self):
+        self.client.logout()
+        response = self.client.get(self.url)
+        self.assertRedirects(
+            response, "/accounts/login/?next=/questions/1/edit"
+        )

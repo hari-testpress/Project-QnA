@@ -46,7 +46,7 @@ class QuestionCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class QuestionUpdateView(UpdateView):
+class QuestionUpdateView(LoginRequiredMixin, UpdateView):
     model = Question
     template_name = "question_update.html"
     fields = ["title", "description", "tags"]
