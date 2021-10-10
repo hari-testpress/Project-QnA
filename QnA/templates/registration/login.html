@@ -41,7 +41,7 @@
               </div>
               {% csrf_token %}
             </form>
-            <p class="mt-5 ml-16 font-semibold tracking-wide">Don't have an account? <a href="#" class="text-blue-800">Sign in</a></p>
+            <p class="mt-5 ml-16 font-semibold tracking-wide">Don't have an account? <a href="{% url 'accounts:signup' %}" class="text-blue-800">Sign in</a></p>
           </div>
         </div>
       </div>    
