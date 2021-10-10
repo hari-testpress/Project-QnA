@@ -57,9 +57,13 @@
           </div>
           <div class="border-t border-gray-200 px-4 py-5 sm:px-6 h-1/2">
             <p class="">{{question.description}}</p>
-            <div class="pt-4">
-                <input type="text" name="text" id="text" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" placeholder="Add comment">
-            </div>
+            <form action="{% url 'questions:post-comment-on-question' question.id %}" method="POST" class="flex justify-between w-full pt-3">
+                <input type="text" name="text" id="text" class="w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block sm:text-sm border-gray-300 rounded-l-md" placeholder="Add comment">
+                <button type="submit" class=" w-16 py-2 px-4 border border-transparent rounded-r-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                  Post
+                </button>
+                {% csrf_token %}
+            </form>
           </div>
           <div class="border-t border-gray-200 px-4 py-5 sm:px-6">
             {% if question.comments.exists %}  
@@ -107,13 +111,14 @@
                         </div>
                     </div>
                 </div>
+              </div>
                 {%endfor%}
             </div>
             {% endif %}
           </div>
         </div>
     </div>
-        </div>
+    </div>
       </section>
       <section aria-labelledby="notes-title">
         <div class="bg-white shadow w-10/12 mx-auto sm:rounded-lg sm:overflow-hidden">

@@ -36,4 +36,14 @@ urlpatterns = [
         views.AnswerDeleteView.as_view(),
         name="delete-answer",
     ),
+    path(
+        "<int:question_id>/post_comment/",
+        views.PostCommentOnQuestion.as_view(),
+        name="post-comment-on-question",
+    ),
+    path(
+        "<int:question_id>/answers/<int:answer_id>/post_comment/",
+        views.PostCommentOnAnswer.as_view(),
+        name="post-comment-on-answer",
+    ),
 ]
