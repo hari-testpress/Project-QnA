@@ -26,4 +26,9 @@ urlpatterns = [
         views.AnswerCreateView.as_view(),
         name="create-answer",
     ),
+    path(
+        "<int:question_id>/answers/<int:pk>/update-answer",
+        views.AnswerUpdateView.as_view(),
+        name="update-answer",
+    ),
 ]
