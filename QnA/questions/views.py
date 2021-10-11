@@ -182,3 +182,16 @@ class EditTheCommentOnQuestion(LoginRequiredMixin, UpdateView):
         return reverse_lazy(
             "questions:question_detail", args=[self.kwargs["question_id"]]
         )
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(created_by=self.request.user)
+
+
+class EditTheCommentOnTheAnswer(EditTheCommentOnQuestion):
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context["answer"] = get_object_or_404(
+            Answer, id=self.kwargs.get("answer_id")
+        )
+        return context

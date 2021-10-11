@@ -56,4 +56,9 @@ urlpatterns = [
         views.EditTheCommentOnQuestion.as_view(),
         name="edit-comment-on-the-question",
     ),
+    path(
+        "<int:question_id>/answers/<int:answer_id>/comment/<int:pk>/edit/",
+        views.EditTheCommentOnTheAnswer.as_view(),
+        name="edit-comment-on-the-answer",
+    ),
 ]
