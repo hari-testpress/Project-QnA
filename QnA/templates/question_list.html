@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load custom_tags %}
 {% block title %} Question list {% endblock %}
 {% block detailbar%}
   <div class="flex justify-between w-9/12 align-center mx-auto mt-5">
@@ -30,8 +31,12 @@
                 </svg>
               </a>
               <p>{{question.vote_score}}</p>
-              <a href="#">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 stroke-current text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              {% if status == 0 or status == -1 %}
+              <a href="{% url 'downvote' "question" question.id %}">
+                {% else %}
+                <a href="{% url 'undo-vote' "question" question.id %}">
+                  {% endif %}
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 stroke-current text-gray-300 {% ifequal status -1 %}text-red-500{% endifequal %}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13l-3 3m0 0l-3-3m3 3V8m0 13a9 9 0 110-18 9 9 0 010 18z" />
                 </svg>
               </a>    
