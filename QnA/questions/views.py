@@ -30,6 +30,3 @@ class QuestionDetailView(DetailView):
     model = Question
     template_name = "question_detail_view.html"
     context_object_name = "question"
-
-    def get_queryset(self):
-        return super().get_queryset()
