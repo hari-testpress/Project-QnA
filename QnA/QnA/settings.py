@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "theme",
     "accounts",
     "widget_tweaks",
+    "django_filters",
 ]
 
 MIDDLEWARE = [
