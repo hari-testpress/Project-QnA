@@ -150,3 +150,17 @@ class CreateAnswerCommentView(CreateCommentMixin):
         self.object.target = get_object_or_404(Answer, id=answer_id)
         self.object.created_by = self.request.user
         return super().form_valid(form)
+
+
+class CommentDeleteView(LoginRequiredMixin, DeleteView):
+    model = Comment
+    template_name = "comment_confirm_delete.html"
+
+    def get_success_url(self):
+        return reverse_lazy(
+            "questions:question_detail", args=[self.kwargs["question_id"]]
+        )
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(created_by=self.request.user)
