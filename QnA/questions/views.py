@@ -4,6 +4,8 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 from django.views.generic import ListView
 
+from .filters import QuestionFilter
+
 from .models import Question
 
 
@@ -16,3 +18,8 @@ class QuestionListView(ListView):
     template_name = "question_list.html"
     context_object_name = "questions"
     paginate_by = 10
+
+    def get_queryset(self):
+        question_list = super().get_queryset()
+        filter = QuestionFilter(self.request.GET, queryset=question_list)
+        return filter.qs
