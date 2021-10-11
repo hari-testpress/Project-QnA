@@ -55,9 +55,9 @@
                 {% endif %}
               </div>
             </div>
-            <h2 id="question-title-81614" class="mt-4 text-base font-semibold text-blue-600">
+            <a href="{% url 'questions:question_detail' question.id %}"><h2 id="question-title-81614" class="mt-4 text-base font-semibold text-blue-600">
                 {{question.title}}
-            </h2>
+            </h2></a>
           </div>
           <div class="mt-2 text-sm text-gray-700 space-y-4">
             <p>{{question.description|truncatewords:50}}</p>

@@ -1,0 +1,193 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Question {{question.id}}{% endblock %}
+
+{% block navbar %}<h1 class="px-4 w-9/12 text-gray-700 font-semibold lg:py-2 lg:flex lg:space-x-8 text-2xl">{{question.title}}</h1>{% endblock %}
+
+{% block body %}
+<div class="mt-8 w-6xl mx-auto sm:px-6 lg:max-w-7xl">
+    <div class="space-y-6 lg:col-start-1 lg:col-span-2">
+      <!-- Description list-->
+      <section aria-labelledby="applicant-information-title">
+        <div class="bg-white  shadow sm:rounded-lg">
+          <div class="px-4 py-5 flex justify-between sm:px-6 h-1/2">
+                <div class="flex flex-col items-center w-16">
+                    <a href="#">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 stroke-current text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 11l3-3m0 0l3 3m-3-3v8m0-13a9 9 0 110 18 9 9 0 010-18z" />
+                      </svg>
+                    </a>
+                    <p>{{question.vote_score}}</p>
+                    <a href="#">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 stroke-current text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13l-3 3m0 0l-3-3m3 3V8m0 13a9 9 0 110-18 9 9 0 010 18z" />
+                      </svg>
+                    </a>    
+              </div>
+            <div class="w-11/12 h-2/5">
+                <div class="flex justify-between py-3">
+                <div>
+                <h2 id="applicant-information-title" class="text-lg leading-6 font-medium text-gray-900">
+                    Question description
+                </h2>
+            <p class="mt-1 max-w-2xl text-sm text-gray-500">
+              <span class="font-semibold">Created by :</span>
+              <span>{{question.created_by.username}}</span>
+            </p>
+            </div>
+            <div class="flex-shrink-0 self-center flex">
+                {% if question.created_by == user %}
+                <div class="relative inline-block text-left">
+                  <a href="#" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    Edit
+                  </a>
+                  <a href="#" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                    Delete
+                  </a>
+                </div>
+                {%endif%}
+            </div>
+          </div>
+          <div class="border-t border-gray-200 px-4 py-5 sm:px-6 h-1/2">
+            <p class="">{{question.description}}</p>
+            <div class="pt-4">
+                <input type="text" name="text" id="text" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" placeholder="Add comment">
+            </div>
+          </div>
+          <div class="border-t border-gray-200 px-4 py-5 sm:px-6">
+            {% if question.comments.exists %}  
+            <div class="sm:col-span-2">
+                <dt class="text-sm font-medium text-gray-500">
+                  comments
+                </dt>
+                {% for comment in question.comments.all %}
+                <div class="px-3 py-4 ">
+                    <div class="px-2 py-4 flex justify-between align-between sm:px-6 w-10/12 h-1/2 border-b">
+                        <div class="flex flex-col justify-between items-center w-20 h-8">
+                            <a href="#">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 stroke-current text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 11l3-3m0 0l3 3m-3-3v8m0-13a9 9 0 110 18 9 9 0 010-18z" />
+                              </svg>
+                            </a>
+                            <p>{{comment.vote_score}}</p>
+                            <a href="#">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 stroke-current text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13l-3 3m0 0l-3-3m3 3V8m0 13a9 9 0 110-18 9 9 0 010 18z" />
+                              </svg>
+                            </a>    
+                      </div>
+                    <div class="flex flex-col w-11/12">
+                        <div class="text-sm flex justify-between pb-3">
+                        <a href="#" class="font-medium text-gray-900">{{comment.created_by.username}}</a>
+                        <div class="flex-shrink-0 self-center flex">
+                            {% if comment.created_by == user %}
+                            <div class="relative inline-block text-left">
+                              <a href="#" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                Edit
+                              </a>
+                              <a href="#" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                Delete
+                              </a>
+                            </div>
+                            {%endif%}
+                        </div>
+                        </div>
+                        <div class="mt-1 text-sm text-gray-700">
+                            <p>{{comment.text}}</p>
+                        </div>
+                        <div class="mt-2 text-sm space-x-2">
+                            <span class="text-gray-500 font-medium">{{comment.created}}</span>
+                        </div>
+                    </div>
+                </div>
+                {%endfor%}
+            </div>
+            {% endif %}
+          </div>
+        </div>
+    </div>
+        </div>
+      </section>
+      <section aria-labelledby="notes-title">
+        <div class="bg-white shadow sm:rounded-lg sm:overflow-hidden">
+          <div class="divide-y divide-gray-200">
+            <div class="px-4 py-5 sm:px-6">
+              <h2 id="notes-title" class="text-lg font-medium text-gray-900">{{question.answers.count}} Answer{{question.answers.count|pluralize}}</h2>
+            </div>
+            <div class="px-4 py-6 sm:px-6">
+              <ul role="list" class="space-y-8">
+                {% for answer in question.answers.all %}
+                <li>
+                    <div class="px-3 py-2 border-b">
+                    <div class="px-4 pt-4 pb-4 flex justify-between sm:px-6 h-1/2">
+                        <div class="flex flex-col items-center w-20">
+                            <a href="#">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 stroke-current text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 11l3-3m0 0l3 3m-3-3v8m0-13a9 9 0 110 18 9 9 0 010-18z" />
+                              </svg>
+                            </a>
+                            <p>{{answer.vote_score}}</p>
+                            <a href="#">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 stroke-current text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13l-3 3m0 0l-3-3m3 3V8m0 13a9 9 0 110-18 9 9 0 010 18z" />
+                              </svg>
+                            </a>    
+                        </div>
+                        <div class="flex flex-col items-left space-x-3 w-11/12">
+                        <div class="text-sm flex justify-between align-center pb-4">
+                            <a href="#" class="font-large font-semibold text-blue-700 ml-3 pb-4">{{answer.created_by.username}}</a>
+                            <div class="flex-shrink-0 self-center flex">
+                                {% if answer.created_by == user %}
+                                <div class="relative inline-block text-left">
+                                  <a href="#" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                    Edit
+                                  </a>
+                                  <a href="#" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                    Delete
+                                  </a>
+                                </div>
+                                {%endif%}
+                            </div>
+                        </div>
+                            <p class="text-gray-500">{{answer.text}}</p>
+                        <div class="mt-2 text-sm space-x-2">
+                            <span class="text-gray-500 font-medium">{{answer.created}}</span>
+                        </div>
+                        <div class="pt-3">
+                            <input type="text" name="text" id="text" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" placeholder="Add comment">
+                        </div>
+                        </div>
+                    </div>
+                
+                {% if answer.comments.exists %}
+                    <div class="ml-36 border-t">
+                        <dt class="text-sm pt-4 font-medium text-gray-500 ">
+                            comments
+                        </dt>
+                        {% for comment in answer.comments.all %}
+                            <div class="flex flex-col items-left py-4 ml-8 space-x-3 w-10/12 {% if not forloop.last %}border-b{% endif %}">
+                            <div class="text-sm flex justify-between pb-4">
+                                <a href="#" class="font-medium text-gray-900 ml-3 pb-4">{{answer.created_by.username}}</a>
+                                {% if answer.created_by == user %}
+                                <div class="relative inline-block text-left">
+                                  <a href="#" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                    Edit
+                                  </a>
+                                  <a href="#" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                    Delete
+                                  </a>
+                                </div>
+                                {%endif%}
+                            </div>
+                            <p class="text-gray-500">{{comment.text}}</p>
+                            </div>
+                        {%endfor%}
+                    </div>
+                {%endif%}
+            </div>
+            </li>
+        {%endfor%}
+            </ul>
+        </section>
+        
+{% endblock %}

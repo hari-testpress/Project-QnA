@@ -2,7 +2,8 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
+
 
 from .filters import QuestionFilter
 
@@ -23,3 +24,9 @@ class QuestionListView(ListView):
         question_list = super().get_queryset()
         filter = QuestionFilter(self.request.GET, queryset=question_list)
         return filter.qs
+
+
+class QuestionDetailView(DetailView):
+    model = Question
+    template_name = "question_detail_view.html"
+    context_object_name = "question"

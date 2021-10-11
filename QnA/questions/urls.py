@@ -1,3 +1,9 @@
 from django.urls import path
+from . import views
 
-urlpatterns = []
+app_name = "questions"
+urlpatterns = [
+    path(
+        "<int:pk>/", views.QuestionDetailView.as_view(), name="question_detail"
+    )
+]
