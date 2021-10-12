@@ -1,19 +1,8 @@
-{% load tailwind_tags %}
-{% load static %}
+{% extends "base.html" %}
 {% load widget_tweaks %}
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {% tailwind_css %} 
-    <title>Create question</title>
-</head>
-<body class="">
-    <div class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-        <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+{% block body %}
+    <div class="min-h-screen bg-gray-100 sm:px-6 lg:px-8">
+        <div class="sm:mx-auto sm:w-full sm:max-w-md">
           <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
             
             <form class="space-y-4" action="{% url 'questions:create-question' %}" method="POST">
@@ -44,6 +33,4 @@
         </div>       
     </div>       
 </div>
-
-</body>
-</html>
+{% endblock %}
