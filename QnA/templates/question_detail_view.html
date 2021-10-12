@@ -165,9 +165,13 @@
                         <div class="mt-2 text-sm space-x-2">
                             <span class="text-gray-500 font-medium">{{answer.created}}</span>
                         </div>
-                        <div class="pt-3">
-                            <input type="text" name="text" id="text" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" placeholder="Add comment">
-                        </div>
+                        <form action="{% url 'questions:post-comment-on-answer' question.id answer.id %}" method="POST" class="flex justify-between w-full pt-3">
+                          {% csrf_token %}  
+                          <input type="text" name="text" id="text" class="w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block sm:text-sm border-gray-300 rounded-l-md" placeholder="Add comment">
+                            <button type="submit" class=" w-16 py-2 px-4 border border-transparent rounded-r-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                              Post
+                            </button>
+                        </form>
                         </div>
                     </div>
                 
@@ -177,22 +181,32 @@
                             comments
                         </dt>
                         {% for comment in answer.comments.all %}
-                            <div class="flex flex-col items-left py-4 ml-8 space-x-3 w-10/12 {% if not forloop.last %}border-b{% endif %}">
-                            <div class="text-sm flex justify-between pb-4">
-                                <a href="#" class="font-medium text-gray-900 ml-3 pb-4">{{answer.created_by.username}}</a>
-                                {% if answer.created_by == user %}
-                                <div class="relative inline-block text-left">
-                                  <a href="#" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                    Edit
-                                  </a>
-                                  <a href="#" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                                    Delete
-                                  </a>
-                                </div>
-                                {%endif%}
-                            </div>
-                            <p class="text-gray-500">{{comment.text}}</p>
-                            </div>
+                        <div class="px-3 py-4 ">
+                          <div class="px-2 py-4 flex justify-between align-between sm:px-6 w-10/12 h-1/2 border-b">
+                          <div class="flex flex-col w-11/12">
+                              <div class="text-sm flex justify-between pb-3">
+                              <div class="mt-2 text-sm flex flex-col">
+                                <a href="#" class="font-medium text-gray-900">{{comment.created_by.username}}</a>
+                                <span class="text-gray-500 font-medium">{{comment.created}}</span>
+                              </div>
+                              <div class="flex-shrink-0 self-center flex">
+                                  {% if comment.created_by == user %}
+                                  <div class="relative inline-block text-left">
+                                    <a href="#" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                      Edit
+                                    </a>
+                                    <a href="#" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                      Delete
+                                    </a>
+                                  </div>
+                                  {%endif%}
+                              </div>
+                              </div>
+                              <div class="mt-1 text-sm text-gray-700">
+                                  <p>{{comment.text}}</p>
+                              </div>
+                          </div>
+                      </div></div>
                         {%endfor%}
                     </div>
                 {%endif%}
