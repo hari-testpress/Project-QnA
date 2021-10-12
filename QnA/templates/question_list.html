@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block title %} Question list {% endblock %}
-{% block body %}
-<main class="lg:col-span-9 xl:col-span-6">
-  <span class="relative z-0 inline-flex shadow-sm rounded-md my-3 ml-10">
+{% block detailbar%}
+  <div class="flex justify-between w-9/12 align-center mx-auto mt-5">
+    <span class="relative z-0 inline-flex shadow-sm rounded-md my-3">
     <a href="?order=-created" class="relative inline-flex items-center px-4 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500">
       Newest
     </a>
@@ -11,11 +11,18 @@
       oldest
     </a>
   </span>
-    <div class="pt-4 bg-gray-100  w-screen h-max">
+  <a href="" class="inline-flex w-52 h-10 mt-2 mr-5 align-middle pl-12 font-semibold items-center px-3 tracking-wide  border border-gray-300 shadow-sm text-base font-medium rounded-md text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+    Ask Question
+  </a>
+ </div>
+ {% endblock %}
+{% block body %}
+<main class="lg:col-span-9 xl:col-span-6 w-6xl">
+    <div class="pt-4 bg-gray-100 h-max mx-auto">
       <h1 class="sr-only">Recent questions</h1>
-      <ul role="list" class="space-y-4 pb-10 bg-gray-100 w-full h-5/6">
+      <ul role="list" class="space-y-4 pb-10 bg-gray-100 w-6xl h-5/6">
         {% for question in object_list %}
-          <li class="bg-white w-9/12 mx-auto px-10 py-6 shadow sm:p-6 sm:rounded-lg flex justify-evenly">
+          <li class="bg-white w-9/12 mx-auto px-5 py-6 shadow sm:p-6 sm:rounded-lg flex justify-evenly">
             <div class="flex flex-col items-center w-10">
               <a href="#">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 stroke-current text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
