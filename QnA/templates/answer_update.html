@@ -1,18 +1,7 @@
-{% load static %}
-{% load tailwind_tags %}
+{% extends "base.html" %}
 {% load widget_tweaks %}
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {% tailwind_css %}
-    <title>Update answer</title>
-</head>
-<body>
-    <div class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+{% block body %}
+    <div class="min-h-screen bg-gray-100 sm:px-6 lg:px-8">
         <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
           <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
             <form class="space-y-6" action="{%url 'questions:update-answer' answer.question.id answer.id %}" method="POST">
@@ -44,5 +33,4 @@
           </div>
         </div>
       </div>
-</body>
-</html>
+{% endblock %}
