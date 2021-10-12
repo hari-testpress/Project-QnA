@@ -2,7 +2,7 @@
 {% load static %}
 {% load custom_tags %}
 {% block title %}Question {{question.id}}{% endblock %}
-
+{% load custom_tags %}
 {% block detailbar %}
 <div class="flex justify-between w-9/12 align-center mx-auto mt-5 px-6">
   <h1 class="px-4 w-9/12 text-gray-500 font-bold lg:py-2 lg:flex lg:space-x-8 text-2xl">{{question.title}}</h1>
@@ -21,21 +21,13 @@
           <div class="px-4 py-5 flex justify-between sm:px-6 h-1/2">
                 <div class="flex flex-col items-center w-16">
                   {% check_user_voted_this "question" question.id request.user as status %}
-                  {% if status == 0 or status == -1 %}
-                  <a href="{% url 'upvote' "question" question.id %}">
-                    {% else %}
-                    <a href="{% url 'undo-vote' "question" question.id %}">
-                      {% endif %}
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 stroke-current text-gray-300 {% if status == 1 %}text-blue-600{% endif %}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <a href="{% url 'upvote' "question" question.id %}">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 stroke-current text-gray-300 {% if status == 1%} text-blue-500 {% endif %}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 11l3-3m0 0l3 3m-3-3v8m0-13a9 9 0 110 18 9 9 0 010-18z" />
-                      </svg>
+                      </svg></a>
                     </a>
                     <p>{{question.vote_score}}</p>
-                    {% if status == 0 or status == 1 %}
-                    <a href="{% url 'downvote' "question" question.id %}">
-                      {% else %}
-                      <a href="{% url 'undo-vote' "question" question.id %}">
-                        {% endif %}
+                    <a href="{% url 'downvote' "question" question.id %}">                      
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 stroke-current text-gray-300 {% ifequal status -1 %}text-red-500{% endifequal %}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13l-3 3m0 0l-3-3m3 3V8m0 13a9 9 0 110-18 9 9 0 010 18z" />
                       </svg>
@@ -86,21 +78,13 @@
                     <div class="px-2 py-4 flex justify-between align-between sm:px-6 w-10/12 h-1/2 border-b">
                         <div class="flex flex-col justify-between items-center w-20 h-8">
                           {% check_user_voted_this "comment" comment.id request.user as status %}
-                          {% if status == 0 or status == -1 %}
                           <a href="{% url 'upvote' "comment" comment.id %}">
-                            {% else %}
-                            <a href="{% url 'undo-vote' "comment" comment.id %}">
-                              {% endif %}
                               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 stroke-current text-gray-300 {% if status == 1 %}text-blue-600{% endif %}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 11l3-3m0 0l3 3m-3-3v8m0-13a9 9 0 110 18 9 9 0 010-18z" />
                               </svg>
                             </a>
                             <p>{{comment.vote_score}}</p>
-                            {% if status == 0 or status == 1 %}
                             <a href="{% url 'downvote' "comment" comment.id %}">
-                              {% else %}
-                              <a href="{% url 'undo-vote' "comment" comment.id %}">
-                                {% endif %}
                               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 stroke-current text-gray-300 {% ifequal status -1 %}text-red-500{% endifequal %}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13l-3 3m0 0l-3-3m3 3V8m0 13a9 9 0 110-18 9 9 0 010 18z" />
                               </svg>
@@ -153,21 +137,13 @@
                     <div class="px-4 pt-4 pb-4 flex justify-between sm:px-6 h-1/2">
                         <div class="flex flex-col items-center w-20">
                           {% check_user_voted_this "answer" answer.id request.user as status %}
-                          {% if status == 0 or status == -1 %}
                           <a href="{% url 'upvote' "answer" answer.id %}">
-                            {% else %}
-                            <a href="{% url 'undo-vote' "answer" answer.id %}">
-                              {% endif %}
                               <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 stroke-current text-gray-300 {% if status == 1 %}text-blue-600{% endif %}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 11l3-3m0 0l3 3m-3-3v8m0-13a9 9 0 110 18 9 9 0 010-18z" />
                               </svg>
                             </a>
                             <p>{{answer.vote_score}}</p>
-                            {% if status == 0 or status == 1 %}
                             <a href="{% url 'downvote' "answer" answer.id %}">
-                              {% else %}
-                              <a href="{% url 'undo-vote' "answer" answer.id %}">
-                                {% endif %}
                               <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 stroke-current text-gray-300 {% if status == -1 %}text-red-500{% endif %}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13l-3 3m0 0l-3-3m3 3V8m0 13a9 9 0 110-18 9 9 0 010 18z" />
                               </svg>
@@ -242,7 +218,7 @@
             </li>
         {%endfor%}
             </ul>
-            <form action="{% url 'questions:create-answer' question.id %}" method="POST">
+            <form action="{% url 'questions:create-answer' question.id %}" method="POST" id="form">
               <h2 class="mt-6 text-3xl font-bold my-6 text-gray-400">
                 Create a Answer
               </h2>

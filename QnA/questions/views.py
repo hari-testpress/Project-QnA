@@ -11,11 +11,12 @@ from django.views.generic import (
     DeleteView,
 )
 from django.shortcuts import redirect, render
+from django.views.generic import ListView, DetailView, CreateView, View
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
-from django.contrib.auth.decorators import login_required
 from django.apps import apps
+from django.http import HttpResponseRedirect
 
 from .filters import QuestionFilter
 
@@ -201,48 +202,47 @@ class EditAnswerCommentView(EditQuestionCommentView):
         return context
 
 
-def get_object(model_name, object_id):
-    if model_name not in ["question", "answer", "comment"]:
-        raise Http404("Invalid request")
+class VoteMixin(LoginRequiredMixin, View):
+    def setup(self, request, *args, **kwargs):
+        self.kwargs = kwargs
+        self.model_name = kwargs.get("model_name")
+        self.object = self.get_object()
+        self.user_id = request.user.id
+        return super().setup(request, *args, **kwargs)
 
-    model = apps.get_model(app_label="questions", model_name=model_name)
+    def get_object(self):
+        if self.model_name not in ["question", "answer", "comment"]:
+            raise Http404("Invalid request")
+        model = apps.get_model("questions", self.model_name)
+        return model.objects.get(id=self.kwargs["object_id"])
 
-    return model.objects.get(id=object_id)
-
-
-def get_question_id(model_name, object):
-    if model_name == "answer":
-        question_id = object.question.id
-    elif model_name == "comment":
-        question_id = object.object_id
-    else:
-        question_id = object.id
-    return question_id
-
-
-@login_required
-def upvote(request, model_name, object_id):
-
-    object = get_object(model_name, object_id)
-    object.votes.up(request.user.id)
-    question_id = get_question_id(model_name, object)
-    return redirect("questions:question_detail", pk=question_id)
+    def get_success_url(self):
+        if self.model_name == "answer":
+            question_id = self.object.question.id
+        elif self.model_name == "comment":
+            question_id = self.object.object_id
+        else:
+            question_id = self.object.id
+        return reverse_lazy("questions:question_detail", args=[question_id])
 
 
-@login_required
-def downvote(request, model_name, object_id):
-
-    object = get_object(model_name, object_id)
-    object.votes.down(request.user.id)
-    question_id = get_question_id(model_name, object)
-    return redirect("questions:question_detail", pk=question_id)
+UPVOTE = 0
+DOWNVOTE = 1
 
 
-def undo_vote(request, model_name, object_id):
+class Upvote(VoteMixin):
+    def get(self, request, *args, **kwargs):
+        if self.object.votes.exists(self.user_id, UPVOTE):
+            self.object.votes.delete(self.user_id)
+        else:
+            self.object.votes.up(self.user_id)
+        return HttpResponseRedirect(self.get_success_url())
 
-    object = get_object(model_name, object_id)
-    print("hello")
-    object.votes.delete(request.user.id)
-    question_id = get_question_id(model_name, object)
 
-    return redirect("questions:question_detail", pk=question_id)
+class Downvote(VoteMixin):
+    def get(self, request, *args, **kwargs):
+        if self.object.votes.exists(self.user_id, DOWNVOTE):
+            self.object.votes.delete(self.user_id)
+        else:
+            self.object.votes.down(self.user_id)
+        return HttpResponseRedirect(self.get_success_url())

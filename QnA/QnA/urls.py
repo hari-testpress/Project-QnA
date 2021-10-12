@@ -23,17 +23,14 @@ urlpatterns = [
     path("accounts/", include("accounts.urls", namespace="accounts")),
     path("questions/", include("questions.urls", namespace="questions")),
     path(
-        "<str:model_name>/<int:object_id>/upvote", views.upvote, name="upvote"
+        "<str:model_name>/<int:object_id>/upvote",
+        views.Upvote.as_view(),
+        name="upvote",
     ),
     path(
         "<str:model_name>/<int:object_id>/downvote",
-        views.downvote,
+        views.Downvote.as_view(),
         name="downvote",
-    ),
-    path(
-        "<str:model_name>/<int:object_id>/undo-vote",
-        views.undo_vote,
-        name="undo-vote",
     ),
     path("", views.QuestionListView.as_view(), name="home"),
 ]

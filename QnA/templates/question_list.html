@@ -23,19 +23,16 @@
       <h1 class="sr-only">Recent questions</h1>
       <ul role="list" class="space-y-4 pb-10 bg-gray-100 w-6xl h-5/6">
         {% for question in object_list %}
-          <li class="bg-white w-9/12 mx-auto px-5 py-6 shadow sm:p-6 sm:rounded-lg flex justify-evenly">
-            <div class="flex flex-col items-center w-10">
-              <a href="#">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 stroke-current text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <li class="bg-white w-9/12 mx-auto px-10 py-6 shadow sm:p-6 sm:rounded-lg flex justify-evenly">
+            <div class="flex flex-col items-center w-10">             
+              {% check_user_voted_this "question" question.id request.user as status %}
+              <a href="{% url 'upvote' "question" question.id %}">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 stroke-current text-gray-300 {% if status == 1 %}text-blue-600{% endif %}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 11l3-3m0 0l3 3m-3-3v8m0-13a9 9 0 110 18 9 9 0 010-18z" />
                 </svg>
               </a>
               <p>{{question.vote_score}}</p>
-              {% if status == 0 or status == -1 %}
               <a href="{% url 'downvote' "question" question.id %}">
-                {% else %}
-                <a href="{% url 'undo-vote' "question" question.id %}">
-                  {% endif %}
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 stroke-current text-gray-300 {% ifequal status -1 %}text-red-500{% endifequal %}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13l-3 3m0 0l-3-3m3 3V8m0 13a9 9 0 110-18 9 9 0 010 18z" />
                 </svg>
