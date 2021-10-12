@@ -110,7 +110,7 @@ class AnswerUpdateView(LoginRequiredMixin, UpdateView):
 
 class AnswerDeleteView(LoginRequiredMixin, DeleteView):
     model = Answer
-    template_name = "question_confirm_delete.html"
+    template_name = "answer_confirm_delete.html"
 
     def get_success_url(self):
         return reverse_lazy(
