@@ -2,10 +2,15 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import (
+    ListView,
+    DetailView,
+    CreateView,
+    UpdateView,
+    DeleteView,
+)
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic.edit import UpdateView
 
 from .filters import QuestionFilter
 
@@ -56,6 +61,16 @@ class QuestionUpdateView(LoginRequiredMixin, UpdateView):
         self.object = form.save(commit=False)
         self.object.save()
         return super().form_valid(form)
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(created_by=self.request.user)
+
+
+class QuestionDeleteView(LoginRequiredMixin, DeleteView):
+    model = Question
+    template_name = "question_confirm_delete.html"
+    success_url = reverse_lazy("home")
 
     def get_queryset(self):
         queryset = super().get_queryset()

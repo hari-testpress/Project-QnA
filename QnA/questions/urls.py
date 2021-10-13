@@ -16,4 +16,9 @@ urlpatterns = [
         views.QuestionUpdateView.as_view(),
         name="edit-question",
     ),
+    path(
+        "<int:pk>/delete",
+        views.QuestionDeleteView.as_view(),
+        name="delete",
+    ),
 ]
