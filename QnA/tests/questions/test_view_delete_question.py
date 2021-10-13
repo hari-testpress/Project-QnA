@@ -14,9 +14,7 @@ class QuestionDeleteViewTests(TestCase):
             title="title", description="description", created_by=self.user
         )
         self.question.save()
-        self.url = reverse(
-            "questions:delete-question", args=[self.question.id]
-        )
+        self.url = reverse("questions:delete", args=[self.question.id])
         self.response = self.client.get(self.url)
         self.home_url = reverse("home")
 

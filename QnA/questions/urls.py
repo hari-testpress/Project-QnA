@@ -19,6 +19,6 @@ urlpatterns = [
     path(
         "<int:pk>/delete",
         views.QuestionDeleteView.as_view(),
-        name="delete-question",
+        name="delete",
     ),
 ]
