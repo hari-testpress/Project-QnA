@@ -35,7 +35,7 @@ class PostCommentOnAnswer(PostCommentTestMixin, TestCase):
         )
         self.answer.save()
         self.url = reverse(
-            "questions:post-comment-on-answer",
+            "questions:create_answer_comment",
             args=[self.question.id, self.answer.id],
         )
         self.success_url = reverse(
@@ -52,7 +52,7 @@ class PostCommentOnQuestion(PostCommentTestMixin, TestCase):
         )
         self.question.save()
         self.url = reverse(
-            "questions:post-comment-on-question", args=[self.question.id]
+            "questions:create_question_comment", args=[self.question.id]
         )
         self.response = self.client.get(self.url)
         self.success_url = reverse(

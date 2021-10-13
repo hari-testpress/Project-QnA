@@ -134,7 +134,7 @@ class CreateCommentMixin(LoginRequiredMixin, CreateView):
         )
 
 
-class PostCommentOnQuestion(CreateCommentMixin):
+class CreateQuestionCommentView(CreateCommentMixin):
     def form_valid(self, form):
         self.object = form.save(commit=False)
         question_id = self.kwargs.get("question_id")
@@ -143,7 +143,7 @@ class PostCommentOnQuestion(CreateCommentMixin):
         return super().form_valid(form)
 
 
-class PostCommentOnAnswer(CreateCommentMixin):
+class CreateAnswerCommentView(CreateCommentMixin):
     def form_valid(self, form):
         self.object = form.save(commit=False)
         answer_id = self.kwargs.get("answer_id")
