@@ -53,12 +53,12 @@ urlpatterns = [
     ),
     path(
         "<int:question_id>/comment/<int:pk>/edit/",
-        views.EditTheCommentOnQuestion.as_view(),
-        name="edit-comment-on-the-question",
+        views.EditQuestionCommentView.as_view(),
+        name="edit_question_comment",
     ),
     path(
         "<int:question_id>/answers/<int:answer_id>/comment/<int:pk>/edit/",
-        views.EditTheCommentOnTheAnswer.as_view(),
-        name="edit-comment-on-the-answer",
+        views.EditAnswerCommentView.as_view(),
+        name="edit_answer_comment",
     ),
 ]

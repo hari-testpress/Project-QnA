@@ -166,7 +166,7 @@ class CommentDeleteView(LoginRequiredMixin, DeleteView):
         return queryset.filter(created_by=self.request.user)
 
 
-class EditTheCommentOnQuestion(LoginRequiredMixin, UpdateView):
+class EditQuestionCommentView(LoginRequiredMixin, UpdateView):
     model = Comment
     fields = ["text"]
     template_name = "comment_update.html"
@@ -188,7 +188,7 @@ class EditTheCommentOnQuestion(LoginRequiredMixin, UpdateView):
         return queryset.filter(created_by=self.request.user)
 
 
-class EditTheCommentOnTheAnswer(EditTheCommentOnQuestion):
+class EditAnswerCommentView(EditQuestionCommentView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context["answer"] = get_object_or_404(

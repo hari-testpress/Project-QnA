@@ -3,7 +3,7 @@ from django.urls import reverse, resolve
 from django.test import TestCase
 
 from questions.models import Question, Answer, Comment
-from questions.views import EditTheCommentOnTheAnswer, EditTheCommentOnQuestion
+from questions.views import EditAnswerCommentView, EditQuestionCommentView
 
 
 class EditCommentMixin:
@@ -63,7 +63,7 @@ class EditTheCommentOnAnswerViewTests(EditCommentMixin, TestCase):
 
     def test_url_resolves_view_class_correctly(self):
         view = resolve(self.url)
-        self.assertEquals(view.func.view_class, EditTheCommentOnTheAnswer)
+        self.assertEquals(view.func.view_class, EditAnswerCommentView)
 
 
 class EditTheCommentOnQuestionViewTests(TestCase):
@@ -91,4 +91,4 @@ class EditTheCommentOnQuestionViewTests(TestCase):
 
     def test_url_resolves_view_class_correctly(self):
         view = resolve(self.url)
-        self.assertEquals(view.func.view_class, EditTheCommentOnQuestion)
+        self.assertEquals(view.func.view_class, EditQuestionCommentView)
