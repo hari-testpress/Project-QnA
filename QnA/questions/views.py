@@ -11,10 +11,11 @@ from django.views.generic import (
 )
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import get_object_or_404
 
 from .filters import QuestionFilter
 
-from .models import Answer, Question
+from .models import Answer, Question, Comment
 
 
 def index(request):
@@ -120,3 +121,32 @@ class AnswerDeleteView(LoginRequiredMixin, DeleteView):
     def get_queryset(self):
         queryset = super().get_queryset()
         return queryset.filter(created_by=self.request.user)
+
+
+class CreateCommentMixin(LoginRequiredMixin, CreateView):
+    model = Comment
+    http_method_names = ["post"]
+    fields = ["text"]
+
+    def get_success_url(self):
+        return reverse_lazy(
+            "questions:question_detail", args=[self.kwargs["question_id"]]
+        )
+
+
+class CreateQuestionCommentView(CreateCommentMixin):
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        question_id = self.kwargs.get("question_id")
+        self.object.target = get_object_or_404(Question, id=question_id)
+        self.object.created_by = self.request.user
+        return super().form_valid(form)
+
+
+class CreateAnswerCommentView(CreateCommentMixin):
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        answer_id = self.kwargs.get("answer_id")
+        self.object.target = get_object_or_404(Answer, id=answer_id)
+        self.object.created_by = self.request.user
+        return super().form_valid(form)
