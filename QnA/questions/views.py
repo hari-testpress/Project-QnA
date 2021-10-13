@@ -106,3 +106,17 @@ class AnswerUpdateView(LoginRequiredMixin, UpdateView):
         return reverse_lazy(
             "questions:question_detail", args=[self.object.question.id]
         )
+
+
+class AnswerDeleteView(LoginRequiredMixin, DeleteView):
+    model = Answer
+    template_name = "answer_confirm_delete.html"
+
+    def get_success_url(self):
+        return reverse_lazy(
+            "questions:question_detail", args=[self.kwargs["question_id"]]
+        )
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(created_by=self.request.user)
