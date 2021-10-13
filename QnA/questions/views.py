@@ -164,3 +164,34 @@ class CommentDeleteView(LoginRequiredMixin, DeleteView):
     def get_queryset(self):
         queryset = super().get_queryset()
         return queryset.filter(created_by=self.request.user)
+
+
+class EditQuestionCommentView(LoginRequiredMixin, UpdateView):
+    model = Comment
+    fields = ["text"]
+    template_name = "comment_update.html"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context["question"] = get_object_or_404(
+            Question, id=self.kwargs.get("question_id")
+        )
+        return context
+
+    def get_success_url(self):
+        return reverse_lazy(
+            "questions:question_detail", args=[self.kwargs["question_id"]]
+        )
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(created_by=self.request.user)
+
+
+class EditAnswerCommentView(EditQuestionCommentView):
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context["answer"] = get_object_or_404(
+            Answer, id=self.kwargs.get("answer_id")
+        )
+        return context
