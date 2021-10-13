@@ -14,7 +14,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .filters import QuestionFilter
 
-from .models import Question
+from .models import Answer, Question
 
 
 def index(request):
@@ -75,3 +75,22 @@ class QuestionDeleteView(LoginRequiredMixin, DeleteView):
     def get_queryset(self):
         queryset = super().get_queryset()
         return queryset.filter(created_by=self.request.user)
+
+
+class AnswerCreateView(LoginRequiredMixin, CreateView):
+    http_method_names = ["post"]
+    model = Answer
+    fields = ["text"]
+
+    def get_success_url(self):
+        return reverse_lazy(
+            "questions:question_detail", args=[self.kwargs["question_id"]]
+        )
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.question = Question.objects.get(
+            id=self.kwargs["question_id"]
+        )
+        self.object.created_by = self.request.user
+        return super().form_valid(form)
