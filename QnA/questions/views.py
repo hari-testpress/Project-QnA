@@ -94,3 +94,15 @@ class AnswerCreateView(LoginRequiredMixin, CreateView):
         )
         self.object.created_by = self.request.user
         return super().form_valid(form)
+
+
+class AnswerUpdateView(LoginRequiredMixin, UpdateView):
+    model = Answer
+    fields = ["text"]
+    template_name = "answer_update.html"
+    context_object_name = "answer"
+
+    def get_success_url(self):
+        return reverse_lazy(
+            "questions:question_detail", args=[self.object.question.id]
+        )
