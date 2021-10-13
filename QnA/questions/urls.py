@@ -11,4 +11,9 @@ urlpatterns = [
         views.QuestionCreateView.as_view(),
         name="create-question",
     ),
+    path(
+        "<int:pk>/edit",
+        views.QuestionUpdateView.as_view(),
+        name="edit-question",
+    ),
 ]
