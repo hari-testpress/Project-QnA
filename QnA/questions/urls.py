@@ -44,7 +44,7 @@ urlpatterns = [
     path(
         "<int:question_id>/answers/<int:answer_id>/comment/",
         views.CreateAnswerCommentView.as_view(),
-        name="create_question_comment",
+        name="create_answer_comment",
     ),
     path(
         "<int:question_id>/comments/<int:pk>/delete/",
