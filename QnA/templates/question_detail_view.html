@@ -69,7 +69,7 @@
           </div>
           <div class="border-t border-gray-200 px-4 py-5 sm:px-6">
             {% if question.comments.exists %}  
-            <div class="sm:col-span-2">
+            <div class="sm:col-span-2" id="comments">
                 <dt class="text-sm font-medium text-gray-500">
                   comments
                 </dt>
@@ -96,7 +96,7 @@
                         <div class="flex-shrink-0 self-center flex">
                             {% if comment.created_by == user %}
                             <div class="relative inline-block text-left">
-                              <a href="{% url 'questions:edit-question-comment' question.id comment.id%}" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                              <a href="{% url 'questions:edit_question_comment' question.id comment.id%}" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                 Edit
                               </a>
                               <a href="{% url 'questions:delete-comment' question.id comment.id %}" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
@@ -130,7 +130,7 @@
               <h2 id="notes-title" class="text-lg font-medium text-gray-900">{{question.answers.count}} Answer{{question.answers.count|pluralize}}</h2>
             </div>
             <div class="px-4 py-6 sm:px-6">
-              <ul role="list" class="space-y-8">
+              <ul role="list" id="answers" class="space-y-8">
                 {% for answer in question.answers.all %}
                 <li>
                     <div class="px-3 py-2 border-b">
@@ -169,7 +169,7 @@
                         <div class="mt-2 text-sm space-x-2">
                             <span class="text-gray-500 font-medium">{{answer.created}}</span>
                         </div>
-                        <form action="{% url 'questions:create-answer-comment' question.id answer.id %}" method="POST" class="flex justify-between w-full pt-3">
+                        <form action="{% url 'questions:create_answer_comment' question.id answer.id %}" method="POST" class="flex justify-between w-full pt-3">
                           {% csrf_token %}  
                           <input type="text" name="text" id="text" class="w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block sm:text-sm border-gray-300 rounded-l-md" placeholder="Add comment">
                             <button type="submit" class=" w-16 py-2 px-4 border border-transparent rounded-r-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
