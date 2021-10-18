@@ -22,7 +22,7 @@
                     <a href="{% url 'upvote' "question" question.id %}">
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 stroke-current text-gray-300 {% if question.vote.action == 0 %} text-blue-500 {% endif %}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 11l3-3m0 0l3 3m-3-3v8m0-13a9 9 0 110 18 9 9 0 010-18z" />
-                      </svg></a>
+                      </svg>
                     </a>
                     <p>{{question.vote_score}}</p>
                     <a href="{% url 'downvote' "question" question.id %}">                      
