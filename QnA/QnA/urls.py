@@ -22,5 +22,15 @@ urlpatterns = [
     url(r"^admin/", admin.site.urls),
     path("accounts/", include("accounts.urls", namespace="accounts")),
     path("questions/", include("questions.urls", namespace="questions")),
+    path(
+        "<str:model_name>/<int:object_id>/upvote",
+        views.Upvote.as_view(),
+        name="upvote",
+    ),
+    path(
+        "<str:model_name>/<int:object_id>/downvote",
+        views.Downvote.as_view(),
+        name="downvote",
+    ),
     path("", views.QuestionListView.as_view(), name="home"),
 ]

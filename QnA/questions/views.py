@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+from django.http.response import Http404
 
 from django.shortcuts import render
 from django.views.generic import (
@@ -8,10 +9,13 @@ from django.views.generic import (
     CreateView,
     UpdateView,
     DeleteView,
+    View,
 )
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
+from django.apps import apps
+from django.http import HttpResponseRedirect
 
 from .filters import QuestionFilter
 
@@ -31,13 +35,32 @@ class QuestionListView(ListView):
     def get_queryset(self):
         question_list = super().get_queryset()
         filter = QuestionFilter(self.request.GET, queryset=question_list)
-        return filter.qs
+        queryset = filter.qs
+        for object in queryset:
+            object.vote = object.votes.get(self.request.user.id)
+        return queryset
 
 
 class QuestionDetailView(DetailView):
     model = Question
     template_name = "question_detail_view.html"
     context_object_name = "question"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        question = context.get("question")
+        question.vote = question.votes.get(self.request.user.id)
+
+        answers = question.answers.all()
+        for answer in answers:
+            answer.vote = answer.votes.get(self.request.user.id)
+        context["answers"] = answers
+
+        comments = question.comments.all()
+        for comment in comments:
+            comment.vote = comment.votes.get(self.request.user.id)
+        context["comments"] = comments
+        return context
 
 
 class QuestionCreateView(LoginRequiredMixin, CreateView):
@@ -195,3 +218,49 @@ class EditAnswerCommentView(EditQuestionCommentView):
             Answer, id=self.kwargs.get("answer_id")
         )
         return context
+
+
+class VoteMixin(LoginRequiredMixin, View):
+    def setup(self, request, *args, **kwargs):
+        self.kwargs = kwargs
+        self.model_name = kwargs.get("model_name")
+        self.object = self.get_object()
+        self.user_id = request.user.id
+        return super().setup(request, *args, **kwargs)
+
+    def get_object(self):
+        if self.model_name not in ["question", "answer", "comment"]:
+            raise Http404("Invalid request")
+        model = apps.get_model("questions", self.model_name)
+        return model.objects.get(id=self.kwargs["object_id"])
+
+    def get_success_url(self):
+        if self.model_name == "answer":
+            question_id = self.object.question.id
+        elif self.model_name == "comment":
+            question_id = self.object.object_id
+        else:
+            question_id = self.object.id
+        return reverse_lazy("questions:question_detail", args=[question_id])
+
+
+UPVOTE = 0
+DOWNVOTE = 1
+
+
+class Upvote(VoteMixin):
+    def get(self, request, *args, **kwargs):
+        if self.object.votes.exists(self.user_id, UPVOTE):
+            self.object.votes.delete(self.user_id)
+        else:
+            self.object.votes.up(self.user_id)
+        return HttpResponseRedirect(self.get_success_url())
+
+
+class Downvote(VoteMixin):
+    def get(self, request, *args, **kwargs):
+        if self.object.votes.exists(self.user_id, DOWNVOTE):
+            self.object.votes.delete(self.user_id)
+        else:
+            self.object.votes.down(self.user_id)
+        return HttpResponseRedirect(self.get_success_url())
