@@ -9,9 +9,8 @@ from django.views.generic import (
     CreateView,
     UpdateView,
     DeleteView,
+    View,
 )
-from django.shortcuts import redirect, render
-from django.views.generic import ListView, DetailView, CreateView, View
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
@@ -36,13 +35,32 @@ class QuestionListView(ListView):
     def get_queryset(self):
         question_list = super().get_queryset()
         filter = QuestionFilter(self.request.GET, queryset=question_list)
-        return filter.qs
+        queryset = filter.qs
+        for object in queryset:
+            object.vote = object.votes.get(self.request.user.id)
+        return queryset
 
 
 class QuestionDetailView(DetailView):
     model = Question
     template_name = "question_detail_view.html"
     context_object_name = "question"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        question = context.get("question")
+        question.vote = question.votes.get(self.request.user.id)
+
+        answers = question.answers.all()
+        for answer in answers:
+            answer.vote = answer.votes.get(self.request.user.id)
+        context["answers"] = answers
+
+        comments = question.comments.all()
+        for comment in comments:
+            comment.vote = comment.votes.get(self.request.user.id)
+        context["comments"] = comments
+        return context
 
 
 class QuestionCreateView(LoginRequiredMixin, CreateView):
